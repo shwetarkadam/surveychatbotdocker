@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Keyboard Input for chat-bubble</title>
+
+	<!-- for mobile screens -->
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- stylesheets are conveniently separated into components -->
+	<link rel="stylesheet" media="all" href="../component/styles/setup.css">
+	<link rel="stylesheet" media="all" href="../component/styles/says.css">
+	<link rel="stylesheet" media="all" href="../component/styles/reply.css">
+	<link rel="stylesheet" media="all" href="../component/styles/typing.css">
+	<link rel="stylesheet" media="all" href="../component/styles/input.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+     <!-- Bootstrap CSS -->    
+    <link href="../component/css/bootstrap.min.css" rel="stylesheet">
+    <!-- bootstrap theme -->
+    <link href="../component/css/bootstrap-theme.css" rel="stylesheet">
+    <!--external css-->
+    <!-- font icon -->
+    <link href="../component/css/elegant-icons-style.css" rel="stylesheet" />
+    <link href="../component/css/font-awesome.min.css" rel="stylesheet" />
+    <!-- Custom styles -->
+    <link href="../component/css/style.css" rel="stylesheet">
+    <link href="../component/css/style-responsive.css" rel="stylesheet" />
+    
+    
+    
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+
+	<style>
+	body {
+		background: #dcdde0;
+	}
+	.bubble-container {
+		height: 100vh;
+	}
+	.bubble-container .input-wrap textarea {
+		margin: 0;
+		width: calc(100% - 30px);
+	}
+        
+        
+        
+     .contact-profile {
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  background: #f5f5f5;
+}
+.contact-profile img {
+  width: 40px;
+  border-radius: 50%;
+  float: left;
+  margin: 9px 12px 0 9px;
+}
+.content .contact-profile p {
+  float: left;
+}
+	</style>
+</head>
+<body>
+  <div class="contact-profile">
+			<img src="../component/img/dp.png" alt="">
+			<p>Code Geass Chatbot</p>
+			
+		</div>
+<!-- container element for chat window -->
+<div id="chat"></div>
+ <div class="text-center">
+    <p>
+        <a text-align:"center" class="btn btn-primary" href="" title="Bootstrap 3 themes generator" >
+            
+   Exit
+        </a>
+        </div>
+<!-- import the JavaScript file -->
+<script src="../component/Bubbles.js"></script>
+<script>
+// initialize by constructing a named function...
+// ...and add text processing plugin:
+        console.log("works*")
+var chatWindow = new Bubbles(document.getElementById("chat"), "chatWindow", {
+  // the one that we care about is inputCallbackFn()
+  // this function returns an object with some data that we can process from user input
+  // and understand the context of it
+
+  // this is an example function that matches the text user typed to one of the answer bubbles
+  // this function does no natural language processing
+  // this is where you may want to connect this script to NLC backend.
+
+  inputCallbackFn: function(o) {
+          console.log("works#")
+    // add error conversation block & recall it if no answer matched
+    var miss = function() {
+            console.log("works&")
+      chatWindow.talk(
+        {
+          "i-dont-get-it": {
+            says: [
+              "Sorry, I don't get it 😕. Pls repeat? Or you can just click below 👇"
+            ],
+            reply: o.convo[o.standingAnswer].reply
+          }
+        },
+        "i-dont-get-it"
+      )
+    }
+
+    // do this if answer found
+    var match = function(key) {
+      setTimeout(function() {
+          console.log("works2")
+        chatWindow.talk(convo, key) // restart current convo from point found in the answer
+      }, 600)
+    }
+
+    // sanitize text for search function
+    var strip = function(text) {
+        console.log("works3")
+      return text.toLowerCase().replace(/[\s.,\/#!$%\^&\*;:{}=\-_'"`~()]/g, "")
+    }
+
+    // search function
+    var found = false
+    o.convo[o.standingAnswer].reply.forEach(function(e, i) {
+        console.log("works4")
+      strip(e.question).includes(strip(o.input)) && o.input.length > 0
+        ? (found = e.answer)
+        : found ? null : (found = false)
+    })
+    found ? match(found) : miss()
+  }
+}) // done setting up chat-bubble
+
+// conversation object defined separately, but just the same as in the
+// "Basic chat-bubble Example" (1-basics.html)
+var  convo ={ ice:{ says:["Hello ! Welcome to Code Geass Chatbot",
+    "Would you like to take survey?"],reply:[{ question:"Yes",answer:"next0"},{ question:"No",answer:"next"}]},next0:{says:["How would you rate our demo experience?"],reply:[{question:"Great",answer:"next1"},{question:"Need More experience",answer:"next1"}]},next1:{says:["WHat did you like the most about the topic?"],reply:[{question:"It was interesting",answer:"next2"},{question:"Loved the intricate details ",answer:"next2"},{question:"Did not like it ",answer:"next2"}]},
+    next2:{says:["How would rate the topic of the course ?"],reply:[{question:"Informative & detailed ",answer:"next3"},{question:"Lacked in technical details ",answer:"next3"},{question:"Good course but needs more attention",answer:"next3"}]
+    
+  },
+  next3:{says:["Thank you for your valueable time.Please press te blue button down below"],reply:[{question:"Your Welcome !!! ",answer:"next"}]}
+}
+// pass JSON to your function and you're done!
+console.log("works1")
+chatWindow.talk(convo)
+</script>
+    <script>
+        $(document).ready(function(){
+              $("a").click(function(){
+                 var inputs = $(".bubble-pick");
+                 console.log(inputs);
+                 input_arr = []
+                 var input_arr = [];
+                 for(var i = 0; i <inputs.length; i++){
+                    input_arr.push($(inputs[i]).text());
+                 }
+                 console.log(input_arr)
+                sendInputs(input_arr)
+              });
+        });
+        
+        
+    function sendInputs(inputs) {
+        $.post('/test', {inputs : inputs}, function(result) {
+               console.log(result);
+            alert("Thank you for your time!!")
+            exitPage();
+           
+    });
+        function exitPage() {
+  window.location.assign("exit")
+}
+         
+                 }
+    </script>
+</body>
